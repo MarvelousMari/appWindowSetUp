@@ -18,10 +18,9 @@
 # from too fast window and desktop movement
 # also allows for shorter sleep times
 
-# open brightness-controller and then kill it
-brightness-controller & sleep 2
-pkill -P "${!}"
-
+# open brightness-controller and then kill it towards the end
+brightness-controller &
+PID2KILL="${!}"
 
 # open the applications for desktop 1
 gnome-terminal & sleep 2
@@ -65,6 +64,8 @@ then
   echo "couldn't open firefox"
   exit 1
 fi
+
+pkill -P "${PID2KILL}"
 # split so atom opens on the right with tile windows on
 atom & sleep 2
 if [[ "${?}" == 1 ]]
