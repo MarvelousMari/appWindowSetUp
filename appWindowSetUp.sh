@@ -18,6 +18,11 @@
 # from too fast window and desktop movement
 # also allows for shorter sleep times
 
+# open brightness-controller and then kill it
+brightness-controller & sleep 2
+pkill -P "${!}"
+
+
 # open the applications for desktop 1
 gnome-terminal & sleep 2
 if [[ "${?}" == 1 ]]
