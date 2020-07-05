@@ -19,7 +19,7 @@
 # also allows for shorter sleep times
 
 # open the applications for desktop 1
-gnome-terminal & sleep 1
+gnome-terminal & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open gnome-terminal"
@@ -38,7 +38,7 @@ then
 fi
 
 # launch desktop 2 applications
-spotify & sleep 1
+spotify & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open spotify"
@@ -54,14 +54,14 @@ then
 fi
 
 # open the application for desktop 0
-firefox & sleep 1
+firefox & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open firefox"
   exit 1
 fi
 # split so atom opens on the right with tile windows on
-atom & sleep 1
+atom & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open atom"
