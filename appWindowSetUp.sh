@@ -65,7 +65,9 @@ then
   exit 1
 fi
 
+# kill brightness controller and children (python)
 pkill -P "${PID2KILL}"
+
 # split so atom opens on the right with tile windows on
 atom & sleep 2
 if [[ "${?}" == 1 ]]
