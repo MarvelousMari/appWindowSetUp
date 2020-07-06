@@ -19,7 +19,7 @@
 # also allows for shorter sleep times
 
 # open brightness-controller and then kill it towards the end
-brightness-controller &
+brightness-controller &latpak run com.spotify.Client
 PID2KILL="${!}"
 
 # open the applications for desktop 1
@@ -42,7 +42,7 @@ then
 fi
 
 # launch desktop 2 applications
-spotify & sleep 2
+flatpak run com.spotify.Client & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open spotify"
