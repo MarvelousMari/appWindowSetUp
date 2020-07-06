@@ -19,7 +19,7 @@
 # also allows for shorter sleep times
 
 # open brightness-controller and then kill it towards the end
-brightness-controller &latpak run com.spotify.Client
+brightness-controller &
 PID2KILL="${!}"
 
 # open the applications for desktop 1
@@ -69,7 +69,7 @@ fi
 pkill -P "${PID2KILL}"
 
 # split so atom opens on the right with tile windows on
-atom & sleep 2
+flatpak run io.atom.Atom & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open atom"
