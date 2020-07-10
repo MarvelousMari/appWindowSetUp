@@ -42,7 +42,7 @@ then
 fi
 
 # launch desktop 2 applications
-flatpak run com.spotify.Client & sleep 2
+flatpak run com.spotify.Client &> /dev/null & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open spotify"
