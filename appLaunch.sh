@@ -3,26 +3,45 @@
 # Launch programs and get their wmctrl window title
 # kill the programs
 
+# TODO: Learn how subshells and background process works
+# TODO: Kill by PID for all types, this workaround works for now
 
 # cmd to launch program
 CMD2LAUNCH=${1}
 # time to sleep
 WAITTIME=${2}
 
-# lauch as background process
-# need to learn about subshells in order to make this properly work using ${!}
-# doesn't work right
-${CMD2LAUNCH} & PID2KILL=$$
-# get the PID to kill later
-echo "PID2KILL: ${PID2KILL}"
+# check if flatpak package
+if [[ ${CMD2LAUNCH} == *"flatpak"* ]]
+then
+  FLATPAKPKG=True
+else
+  FLATPAKPKG=False
+fi
 
-wait $WAITTIME
+# lauch as background process ignore all output
+${CMD2LAUNCH} &> /dev/null &
+# get the PID to kill later
+
+# give the app time to load gui
+sleep $WAITTIME
 
 # get the window header info
-WINHEADER=$(wmctrl -l | tail -n 1 )
+WINHEADER=$(wmctrl -l -p | tail -n 1 | awk '{$1=$2=$3=$4=""; print $0}')
 echo "${WINHEADER}"
 
-# kill the program
-pkill -9 -P ${PID2KILL}
-
+if [[ ${FLATPAKPKG} == "True" ]]
+then
+  # get INSTANCEID
+  INSTANCEID=$(flatpak ps | head -n1 | awk '{print $1}')
+#  echo "${INSTANCEID}"
+  # kill instance
+  flatpak kill ${INSTANCEID}
+else
+  # get the pid of the window that was just opened
+  CMDPID=$(wmctrl -l -p | tail -n 1 | awk '{print $3}')
+#  echo "CMDPID: ${CMDPID}"
+  # kill the new window
+  kill ${CMDPID}
+fi
 exit 0
