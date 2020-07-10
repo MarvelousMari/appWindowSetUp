@@ -74,16 +74,10 @@ while numberOfApps > 0 :
     InputedWindowName = input("desktop %s:   " % (currentDesktop))
     # if the input is a valid windowName
     if InputedWindowName in windowNames:
-        try:
-            # add to windowLocations [desktopnum] = Val array of tuples [].append(windowName, launch command)
-            windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
-            # remove from the possible options to prevent double placing
-            numberOfApps = numberOfApps - 1
-        # catch the exception that there is no value for that in the dictionary already and so you can't use "".append"
-        except :
-            # add to windowLocations [desktopnum] = Array of tuples[(append(windowName, launch command)]
-            windowLocations[currentDesktop] = [ ( InputedWindowName, windowNames[InputedWindowName] ) ]
-            numberOfApps = numberOfApps - 1
+        # prevents issues with dictionary not having an array value and trying to use append
+        windowLocations[currentDesktop] = windowLocations[currentDesktop] if currentDesktop in windowLocations else []
+        windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
+        numberOfApps = numberOfApps - 1
         # TODO: CHECK TO SEE IF MULTIPLE OF THE SAME WINDOW WORKS
         # if currentDesktop is the highest available
         if currentDesktop == desktopsAvailable:

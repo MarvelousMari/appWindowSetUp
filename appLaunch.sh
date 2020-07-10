@@ -21,15 +21,17 @@ fi
 
 # lauch as background process ignore all output
 ${CMD2LAUNCH} &> /dev/null &
-# get the PID to kill later
+# TODO: check to make sure the command ran successfully
 
 # give the app time to load gui
 sleep $WAITTIME
 
 # get the window header info
 WINHEADER=$(wmctrl -l -p | tail -n 1 | awk '{$1=$2=$3=$4=""; print $0}')
+# stdout the info so the pyInput script can handle it
 echo "${WINHEADER}"
 
+# kill the app we launched
 if [[ ${FLATPAKPKG} == "True" ]]
 then
   # get INSTANCEID
