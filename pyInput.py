@@ -22,6 +22,7 @@ while True:
     app = input("cmd:  ")
     print("")
     # TODO: add while catch correct input to prevent mistakes
+    # moving this # TODO: to appLaunch.sh
     if app == 'DONE':
         break
     else:
@@ -54,7 +55,8 @@ print("windowNames: %s" % (windowNames))
 
 print("")
 
-# desktopNum : windowName
+# desktopNum : [(windowName, launch cmd)]
+# {0: [(firefox, firefox),(atom, flatpak run io.atom.Atom)]}
 windowLocations = {}
 print("desktops start at 0, you can not create an empty desktop inbetween")
 # desktop apps are being added to
@@ -63,28 +65,32 @@ currentDesktop = 0
 desktopsAvailable = 0
 # while there are windows that haven't been assigned
 print("add an application to desktop OR input NEXT to move to the next desktop")
+# windowNames.keys() is the name of the windows that the user provided
 print("application to choose from:", (windowNames.keys()))
+# like a for loop through the whole appList but can be out of order for easier use
 numberOfApps = len(appList)
 while numberOfApps > 0 :
-    appInput = input("desktop %s:   " % (currentDesktop))
+    # adsaf@asdf $"desktop 0:" ## should be a window name
+    InputedWindowName = input("desktop %s:   " % (currentDesktop))
     # if the input is a valid windowName
-    if appInput in windowNames:
+    if InputedWindowName in windowNames:
         try:
-            print("Try: windowLocations: ", windowLocations)
-            # add to windowLocations desktopnum : windowName
-            windowLocations[currentDesktop].append( (appInput, windowNames[appInput]) )
+            # add to windowLocations [desktopnum] = Val array of tuples [].append(windowName, launch command)
+            windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
             # remove from the possible options to prevent double placing
             numberOfApps = numberOfApps - 1
+        # catch the exception that there is no value for that in the dictionary already and so you can't use "".append"
         except :
-            print(" KeyError windowLocations: ", windowLocations)
-            windowLocations[currentDesktop] = [ ( appInput, windowNames[appInput] ) ]
+            # add to windowLocations [desktopnum] = Array of tuples[(append(windowName, launch command)]
+            windowLocations[currentDesktop] = [ ( InputedWindowName, windowNames[InputedWindowName] ) ]
             numberOfApps = numberOfApps - 1
         # TODO: CHECK TO SEE IF MULTIPLE OF THE SAME WINDOW WORKS
         # if currentDesktop is the highest available
         if currentDesktop == desktopsAvailable:
             # make another desktop available
             desktopsAvailable = desktopsAvailable + 1
-    elif appInput == "NEXT":
+    # move to next desktop if available
+    elif InputedWindowName == "NEXT":
         # if desktopsAvailable is only 1 higher than the current desktop
         if desktopsAvailable == (currentDesktop + 1):
             # move to the next desktop
@@ -94,14 +100,15 @@ while numberOfApps > 0 :
             print("can't have an empty desktop")
     # if not valid input
     else:
-        print("'%s' is not a valid input" % (appInput))
+        print("'%s' is not a valid input" % (InputedWindowName))
     print("")
 
 print("")
 
-# desktopNum : windowNamesArray
+# desktopNum : [(windowName, launch cmd)]
+# {0: [(firefox, firefox),(atom, flatpak run io.atom.Atom)]}
 print("windowLocations: %s" % (windowLocations))
-# dict for windowName : appLaunchcmd
+# dict for window name : app launch cmd
 print("windowNames: %s" % (windowNames))
 # list of launch cmds
 print("appList: %s" % (appList))
@@ -120,15 +127,20 @@ gen_path = os.path.dirname(os.path.realpath(__file__)) + "/appGenWindowSetUp.sh"
 
 gen_file = open(gen_path, 'w')
 
+# add shabang
 gen_file.write("#!/bin/bash")
 gen_file.write("\n \n")
 gen_file.write("# this is a script generated to launch apps in diffrent desktops on start up")
 gen_file.write("\n")
 gen_file.write("\n")
+
 for desktop in windowLocations:
+    # for each tuple in the array that is the value of the windowLocations current desktop from loop above
     for winTupleToPlace in windowLocations[desktop]:
+        # /dev/null/ the output to keep things clean # launch cmd # sleep time
         gen_file.write("%s &> /dev/null & sleep %s" % (winTupleToPlace[1], str(waitTime)))
         gen_file.write("\n")
+        # move window from this tuple in array of tuples given to the current desktop
         gen_file.write("wmctrl -r %s -t %s" % (winTupleToPlace[0] , desktop))
         gen_file.write("\n")
         gen_file.write("\n")
