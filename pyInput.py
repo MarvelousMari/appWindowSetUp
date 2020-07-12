@@ -28,9 +28,9 @@ while True:
     else:
         appList.append(app)
 
-# print("applist: %s" % (appList))
+print("applist: %s" % (appList))
 
-# dict for window name : app launch cmd
+# dict for {window name : app launch cmd}
 windowNames = {}
 
 # get the window names of all of the apps
@@ -38,6 +38,7 @@ for app in appList:
     # launch the apps
     appSubProc = subprocess.run(['./appLaunch.sh', app , str(waitTime)], capture_output=True, text=True)
     # check to see if the terminal launch command(app) is already a part of the window descriptor
+    # firefox is the command and the name of the window
     # if it is add it to the dictionary
     if app.lower() in appSubProc.stdout.lower():
         windowNames[app] = app
@@ -55,7 +56,7 @@ print("windowNames: %s" % (windowNames))
 
 print("")
 
-# desktopNum : [(windowName, launch cmd)]
+# {desktopNum : [(windowName, launch cmd)]}
 # {0: [(firefox, firefox),(atom, flatpak run io.atom.Atom)]}
 windowLocations = {}
 print("desktops start at 0, you can not create an empty desktop inbetween")
@@ -63,22 +64,22 @@ print("desktops start at 0, you can not create an empty desktop inbetween")
 currentDesktop = 0
 # how many desktops are available
 desktopsAvailable = 0
-# while there are windows that haven't been assigned
 print("add an application to desktop OR input NEXT to move to the next desktop")
 # windowNames.keys() is the name of the windows that the user provided
 print("application to choose from:", (windowNames.keys()))
-# like a for loop through the whole appList but can be out of order for easier use
-numberOfApps = len(appList)
-while numberOfApps > 0 :
-    # adsaf@asdf $"desktop 0:" ## should be a window name
+# while there are still launch cmds that havent't been added
+# in the format of the window name desktop num
+while len(appList) > 0 :
+    # get the name of the window that belongs on that desktop
     InputedWindowName = input("desktop %s:   " % (currentDesktop))
     # if the input is a valid windowName
     if InputedWindowName in windowNames:
         # prevents issues with dictionary not having an array value and trying to use append
         windowLocations[currentDesktop] = windowLocations[currentDesktop] if currentDesktop in windowLocations else []
+        # append to the value
         windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
-        numberOfApps = numberOfApps - 1
-        # TODO: CHECK TO SEE IF MULTIPLE OF THE SAME WINDOW WORKS
+        # remove from appList so that when there are none left the while loop ends
+        appList.remove(windowNames[InputedWindowName])
         # if currentDesktop is the highest available
         if currentDesktop == desktopsAvailable:
             # make another desktop available
@@ -89,7 +90,7 @@ while numberOfApps > 0 :
         if desktopsAvailable == (currentDesktop + 1):
             # move to the next desktop
             currentDesktop = currentDesktop + 1
-        # else if desktopsAvailable is 2 higher(empty desktop)
+        # so if the desktop can't be empty or skip a number
         else:
             print("can't have an empty desktop")
     # if not valid input
@@ -99,18 +100,17 @@ while numberOfApps > 0 :
 
 print("")
 
-# desktopNum : [(windowName, launch cmd)]
 # {0: [(firefox, firefox),(atom, flatpak run io.atom.Atom)]}
 print("windowLocations: %s" % (windowLocations))
-# dict for window name : app launch cmd
+# dict for {window name : app launch cmd}
 print("windowNames: %s" % (windowNames))
-# list of launch cmds
+# list of launch cmds SHOULD BE EMPTY AT THIS POINT
 print("appList: %s" % (appList))
 
-
+# EX of possible info at this point
 # windowLocations: {0: [('firefox', 'firefox'), ('atom', 'flatpak run io.atom.Atom')], 1: [('gedit', 'gedit')], 2: [('spotify', 'flatpak run com.spotify.Client')]}
 # windowNames: {'firefox': 'firefox', 'atom': 'flatpak run io.atom.Atom', 'gedit': 'gedit', 'spotify': 'flatpak run com.spotify.Client'}
-# appList: ['firefox', 'flatpak run io.atom.Atom', 'gedit', 'flatpak run com.spotify.Client']
+# appList: []
 
 
 # generate code
@@ -128,8 +128,10 @@ gen_file.write("# this is a script generated to launch apps in diffrent desktops
 gen_file.write("\n")
 gen_file.write("\n")
 
+# desktop num in window windowLocations
 for desktop in windowLocations:
     # for each tuple in the array that is the value of the windowLocations current desktop from loop above
+    # {0: [(windowName, launchCmd),(windowName, launchCmd)}
     for winTupleToPlace in windowLocations[desktop]:
         # /dev/null/ the output to keep things clean # launch cmd # sleep time
         gen_file.write("%s &> /dev/null & sleep %s" % (winTupleToPlace[1], str(waitTime)))
