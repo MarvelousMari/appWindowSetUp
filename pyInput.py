@@ -107,7 +107,7 @@ print("windowNames: %s" % (windowNames))
 # list of launch cmds SHOULD BE EMPTY AT THIS POINT
 print("appList: %s" % (appList))
 
-# EX of possible info at this point
+# EX. of possible info at this point
 # windowLocations: {0: [('firefox', 'firefox'), ('atom', 'flatpak run io.atom.Atom')], 1: [('gedit', 'gedit')], 2: [('spotify', 'flatpak run com.spotify.Client')]}
 # windowNames: {'firefox': 'firefox', 'atom': 'flatpak run io.atom.Atom', 'gedit': 'gedit', 'spotify': 'flatpak run com.spotify.Client'}
 # appList: []
@@ -143,3 +143,5 @@ for desktop in windowLocations:
 
 gen_file.write("exit 0")
 gen_file.close()
+
+# TODO: chmod the written file
