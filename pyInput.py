@@ -79,7 +79,12 @@ while len(appList) > 0 :
         # append to the value
         windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
         # remove from appList so that when there are none left the while loop ends
-        appList.remove(windowNames[InputedWindowName])
+        try:
+            appList.remove(windowNames[InputedWindowName])
+        except:
+            # TODO: REMOVE FROM THE WINDOWLOCATIONS IF IT'S A REPEAT THAT CAN'T BE REMOVED
+            print(InputedWindowName + " is not an available window")
+
         # if currentDesktop is the highest available
         if currentDesktop == desktopsAvailable:
             # make another desktop available
