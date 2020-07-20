@@ -1,10 +1,13 @@
 import sys
 import subprocess
+import os
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
 class App(QWidget):
+
+    pwd = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         super().__init__()
@@ -37,13 +40,15 @@ class App(QWidget):
     @pyqtSlot()
     def android_on_click(self):
         print('android_on_click')
-        androidSubProc = subprocess.run(["./androidDesktopLauncher.sh"])
+        androidCMD = os.path.dirname(os.path.realpath(__file__)) + "/androidDesktopLauncher.sh"
+        androidSubProc = subprocess.run([androidCMD])
         sys.exit()
 
     @pyqtSlot()
     def bash_on_click(self):
         print('bash_on_click')
-        bashSubProc = subprocess.run(['./bashDesktopLauncher.sh'])
+        bashCMD = os.path.dirname(os.path.realpath(__file__)) + "/bashDesktopLauncher.sh"
+        bashSubProc = subprocess.run([bashCMD])
         sys.exit()
 
 
