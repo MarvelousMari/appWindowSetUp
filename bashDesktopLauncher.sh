@@ -54,7 +54,7 @@ then
 fi
 
 # open the application for desktop 0
-firefox udemy.com github.com mariellapage.com/wp-admin & sleep 2
+firefox udemy.com github.com/login mariellapage.com/wp-admin & sleep 2
 if [[ "${?}" == 1 ]]
 then
   echo "couldn't open firefox"
