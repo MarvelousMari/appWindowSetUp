@@ -30,10 +30,10 @@ fi
 # wmctrl window argument is usually a string
 # and the first window containing that string is acted on
 # gnome-terminal windows all contain @pop-os
-wmctrl -r @pop-os -t 1
+wmctrl -r @Mtop -t 1
 if [[ "${?}" == 1 ]]
 then
-  echo "couldn't move window named '@pop-os'"
+  echo "couldn't move window named '@Mtop'"
   exit 1
 fi
 

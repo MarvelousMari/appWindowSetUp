@@ -1,13 +1,16 @@
 import sys
 import subprocess
 import os
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+from PyQt5 import QtCore
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QCheckBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
 class App(QWidget):
 
     pwd = os.path.dirname(os.path.realpath(__file__))
+
+    launchWithDesktop = False
 
     def __init__(self):
         super().__init__()
@@ -35,7 +38,20 @@ class App(QWidget):
         button.move(200,70)
         button.clicked.connect(self.bash_on_click)
 
+        checkBox = QCheckBox("DesktopConnected", self)
+        checkBox.stateChanged.connect(self.clickBox)
+        checkBox.move(300,70)
+
+
         self.show()
+
+    def clickBox(self, state):
+        if state == QtCore.Qt.Checked:
+            launchWithDesktop = True
+            print("LaunchWithDesktop = True")
+        else:
+            launchWithDesktop =False
+            print("LaunchWithDesktop = False")
 
     @pyqtSlot()
     def android_on_click(self):
