@@ -79,7 +79,12 @@ while len(appList) > 0 :
         # append to the value
         windowLocations[currentDesktop].append( (InputedWindowName, windowNames[InputedWindowName]) )
         # remove from appList so that when there are none left the while loop ends
-        appList.remove(windowNames[InputedWindowName])
+        try:
+            appList.remove(windowNames[InputedWindowName])
+        except:
+            # TODO: REMOVE FROM THE WINDOWLOCATIONS IF IT'S A REPEAT THAT CAN'T BE REMOVED
+            print(InputedWindowName + " is not an available window")
+
         # if currentDesktop is the highest available
         if currentDesktop == desktopsAvailable:
             # make another desktop available
@@ -107,7 +112,7 @@ print("windowNames: %s" % (windowNames))
 # list of launch cmds SHOULD BE EMPTY AT THIS POINT
 print("appList: %s" % (appList))
 
-# EX of possible info at this point
+# EX. of possible info at this point
 # windowLocations: {0: [('firefox', 'firefox'), ('atom', 'flatpak run io.atom.Atom')], 1: [('gedit', 'gedit')], 2: [('spotify', 'flatpak run com.spotify.Client')]}
 # windowNames: {'firefox': 'firefox', 'atom': 'flatpak run io.atom.Atom', 'gedit': 'gedit', 'spotify': 'flatpak run com.spotify.Client'}
 # appList: []
@@ -143,3 +148,5 @@ for desktop in windowLocations:
 
 gen_file.write("exit 0")
 gen_file.close()
+
+# TODO: chmod the written file

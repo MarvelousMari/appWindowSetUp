@@ -2,13 +2,16 @@
  
 # this is a script generated to launch apps in diffrent desktops on start up
 
-gedit &> /dev/null & sleep 3
-wmctrl -r gedit -t 0
+firefox &> /dev/null & sleep 5
+wmctrl -r firefox -t 0
 
-flatpak run io.atom.Atom &> /dev/null & sleep 3
-wmctrl -r atom -t 1
+flatpak run com.google.AndroidStudio &> /dev/null & sleep 5
+wmctrl -r android -t 1
 
-flatpak run com.spotify.Client &> /dev/null & sleep 3
-wmctrl -r spotify -t 1
+flatpak run com.google.AndroidStudio &> /dev/null & sleep 5
+wmctrl -r android -t 1
+
+flatpak run com.spotify.Client &> /dev/null & sleep 5
+wmctrl -r spotify -t 2
 
 exit 0
