@@ -8,9 +8,7 @@ from PyQt5.QtCore import pyqtSlot
 
 class App(QWidget):
 
-    pwd = os.path.dirname(os.path.realpath(__file__))
 
-    launchWithDesktop = False
 
     def __init__(self):
         super().__init__()
@@ -20,6 +18,9 @@ class App(QWidget):
         self.top = 10
         self.width = 320
         self.height = 200
+        self.pwd = os.path.dirname(os.path.realpath(__file__))
+        self.launchWithDesktop = False
+        self.launchPath = self.pwd + "/combinedLaunch.sh"
         self.initUI()
 
     def initUI(self):
@@ -47,25 +48,31 @@ class App(QWidget):
 
     def clickBox(self, state):
         if state == QtCore.Qt.Checked:
-            launchWithDesktop = True
+            self.launchWithDesktop = True
             print("LaunchWithDesktop = True")
         else:
-            launchWithDesktop =False
+            self.launchWithDesktop =False
             print("LaunchWithDesktop = False")
 
     @pyqtSlot()
     def android_on_click(self):
         print('android_on_click')
-        androidCMD = os.path.dirname(os.path.realpath(__file__)) + "/androidDesktopLauncher.sh"
-        androidSubProc = subprocess.run([androidCMD])
+        if self.launchWithDesktop:
+            androidSubProc = subprocess.run([self.launchPath, "-c ANDROID", "-d"])
+        else:
+            androidSubProc = subprocess.run([self.launchPath, "-c ANDROID"])
         sys.exit()
 
     @pyqtSlot()
     def bash_on_click(self):
         print('bash_on_click')
-        bashCMD = os.path.dirname(os.path.realpath(__file__)) + "/bashDesktopLauncher.sh"
-        bashSubProc = subprocess.run([bashCMD])
+        if self.launchWithDesktop:
+            bashSubProc = subprocess.run([self.launchPath, "-c", "BASH", "-d"])
+        else:
+            bashSubProc = subprocess.run([self.launchPath, "-c", "BASH"])
         sys.exit()
+
+
 
 
 if __name__ == '__main__':
