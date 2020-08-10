@@ -58,9 +58,9 @@ class App(QWidget):
     def android_on_click(self):
         print('android_on_click')
         if self.launchWithDesktop:
-            androidSubProc = subprocess.run([self.launchPath, "-c ANDROID", "-d"])
+            androidSubProc = subprocess.run([self.launchPath, "-c", "ANDROID", "-d"])
         else:
-            androidSubProc = subprocess.run([self.launchPath, "-c ANDROID"])
+            androidSubProc = subprocess.run([self.launchPath, "-c", "ANDROID"])
         sys.exit()
 
     @pyqtSlot()

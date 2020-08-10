@@ -169,14 +169,14 @@ tower_bash(){
   exit 0
 }
 
-DESKTOP_CONNECTED=false
-CONFIG_TO_LAUNCH=""
+$DESKTOP_CONNECTED=false
+$CONFIG_TO_LAUNCH=""
 
 while getopts dc: OPTION
 do
   case ${OPTION} in
     d)
-      DESKTOP_CONNECTED=true
+      $DESKTOP_CONNECTED=true
       ;;
     c)
       CONFIG_TO_LAUNCH="${OPTARG}"
@@ -200,7 +200,7 @@ if [[ $HOSTNAME == "MTower" ]]
 then
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
-    if DESKTOP_CONNECTED
+    if $DESKTOP_CONNECTED
     then
       tower_connected_bash
     else
@@ -208,7 +208,7 @@ then
     fi
   elif [[ $CONFIG_TO_LAUNCH == "ANDROID" ]]
   then
-    if DESKTOP_CONNECTED
+    if $DESKTOP_CONNECTED
     then
       tower_connected_android
     else
@@ -222,7 +222,7 @@ elif [[ $HOSTNAME == "Mtop" ]]
 then
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
-    if DESKTOP_CONNECTED
+    if $DESKTOP_CONNECTED
     then
       top_connected_bash
     else
@@ -230,7 +230,7 @@ then
     fi
   elif [[ $CONFIG_TO_LAUNCH == "ANDROID" ]]
   then
-    if DESKTOP_CONNECTED
+    if $DESKTOP_CONNECTED
     then
       top_connected_android
     else
