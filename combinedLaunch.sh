@@ -5,6 +5,7 @@ usage() {
   echo "-c what config either BASH or ANDROID"
 }
 
+# works
 top_connected_android(){
 
   echo "TOP_CONNECTED_ANDROID"
@@ -38,6 +39,7 @@ top_connected_android(){
   exit 0
 }
 
+# works
 top_connected_bash(){
 
   echo "TOP_CONNECTED_BASH"
@@ -71,6 +73,7 @@ top_connected_bash(){
   exit 0
 }
 
+# works
 top_android(){
 
   echo "TOP_ANDROID"
@@ -90,60 +93,27 @@ top_android(){
   exit 0
 }
 
+# works
 top_bash(){
 
   echo "TOP_BASH"
 
-  # open the applications for desktop 1
-  gnome-terminal & sleep 2
-  if [[ "${?}" == 1 ]]
-  then
-    echo "couldn't open gnome-terminal"
-    exit 1
-  fi
-
-  # move applications to desktop 1
-  # wmctrl window argument is usually a string
-  # and the first window containing that string is acted on
-  # gnome-terminal windows all contain @pop-os
-  wmctrl -r @Mtop -t 1
-  if [[ "${?}" == 1 ]]
-  then
-    echo "couldn't move window named '@Mtop'"
-    exit 1
-  fi
-
-  # launch desktop 2 applications
-  flatpak run com.spotify.Client &> /dev/null & sleep 2
-  if [[ "${?}" == 1 ]]
-  then
-    echo "couldn't open spotify"
-    exit 1
-  fi
-
-  # move applications to desktop 2
-  wmctrl -r spotify -t 2
-  if [[ "${?}" == 1 ]]
-  then
-    echo "couldn't move spotify"
-    exit 1
-  fi
-
   # open the application for desktop 0
   firefox udemy.com github.com/login mariellapage.com/wp-admin & sleep 2
-  if [[ "${?}" == 1 ]]
-  then
-    echo "couldn't open firefox"
-    exit 1
-  fi
 
   # split so atom opens on the right with tile windows on
   flatpak run io.atom.Atom & sleep 2
-  if [[ "${?}" == 1 ]]
+
+  gnome-terminal & sleep 3
+
+  wmctrl -r @Mtop -t 1
+  if [[ "${?}" -ne 0 ]]
   then
-    echo "couldn't open atom"
-    exit 1
+    echo "didn't run move terminal right"
   fi
+  flatpak run com.spotify.Client &> /dev/null & sleep 2
+
+  wmctrl -r spotify -t 2
 
   exit 0
 }
@@ -218,8 +188,8 @@ do
 done
 
 if [[ $HOSTNAME == "MTower" ]]
-echo "DESKTOP IS: ${DESKTOP_CONNECTED}"
 then
+  echo "DESKTOP IS: ${DESKTOP_CONNECTED}"
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
     if [ "$DESKTOP_CONNECTED" = true ]
@@ -244,6 +214,7 @@ then
   fi
 elif [[ $HOSTNAME == "Mtop" ]]
 then
+  echo "IN Mtop"
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
     if [ "$DESKTOP_CONNECTED" = true ]
@@ -251,6 +222,7 @@ then
       echo "DESKTOP FUNC SELECTED"
       top_connected_bash
     else
+      echo "in spot to call top BASH"
       top_bash
     fi
   elif [[ $CONFIG_TO_LAUNCH == "ANDROID" ]]
