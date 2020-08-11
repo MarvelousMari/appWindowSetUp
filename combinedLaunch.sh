@@ -7,7 +7,9 @@ usage() {
 
 top_connected_android(){
 
-  barrierc --enable-crypto 192.168.1.15
+  echo "TOP_CONNECTED_ANDROID"
+
+  barrierc --enable-crypto 192.168.1.15 &> /dev/null &
 
   # launch desktop 2 applications
   flatpak run com.spotify.Client &> /dev/null & sleep 2
@@ -38,7 +40,9 @@ top_connected_android(){
 
 top_connected_bash(){
 
-  barrierc --enable-crypto 192.168.1.15
+  echo "TOP_CONNECTED_BASH"
+
+  barrierc --enable-crypto 192.168.1.15 &> /dev/null &
 
   # launch desktop 2 applications
   flatpak run com.spotify.Client &> /dev/null & sleep 2
@@ -68,6 +72,9 @@ top_connected_bash(){
 }
 
 top_android(){
+
+  echo "TOP_ANDROID"
+
   firefox udemy.com github.com/login mariellapage.com/wp-admin &> /dev/null & sleep 2
   wmctrl -r firefox -t 0
 
@@ -84,6 +91,9 @@ top_android(){
 }
 
 top_bash(){
+
+  echo "TOP_BASH"
+
   # open the applications for desktop 1
   gnome-terminal & sleep 2
   if [[ "${?}" == 1 ]]
@@ -138,20 +148,28 @@ top_bash(){
   exit 0
 }
 
+# works
 tower_connected_android(){
-  flatpak run com.github.debauchee.barrier &
+
+  echo "TOWER_CONNECTED_ANDROID"
+
+  flatpak run com.github.debauchee.barrier &> /dev/null &
   flatpak run com.google.AndroidStudio &> /dev/null &
   exit 0
 }
 
+# works
 tower_connected_bash(){
-  flatpak run com.github.debauchee.barrier &
+  echo "TOWER_CONNECTED_BASH"
+  flatpak run com.github.debauchee.barrier &> /dev/null &
   gnome-terminal &
   flatpak run io.atom.Atom &> /dev/null &
   exit 0
 }
 
+# works
 tower_android(){
+  echo "TOWER_ANDROID"
   firefox udemy.com github.com/login mariellapage.com/wp-admin &> /dev/null &
   flatpak run com.google.AndroidStudio &> /dev/null &
   flatpak run com.spotify.Client &> /dev/null & sleep 2
@@ -159,7 +177,9 @@ tower_android(){
   exit 0
 }
 
+# works
 tower_bash(){
+  echo "TOWER_BASH"
   flatpak run io.atom.Atom &> /dev/null &
   firefox udemy.com github.com/login mariellapage.com/wp-admin &> /dev/null &
   gnome-terminal & sleep 2
@@ -169,14 +189,15 @@ tower_bash(){
   exit 0
 }
 
-$DESKTOP_CONNECTED=false
-$CONFIG_TO_LAUNCH=""
+DESKTOP_CONNECTED=false
+CONFIG_TO_LAUNCH=""
 
 while getopts dc: OPTION
 do
   case ${OPTION} in
     d)
-      $DESKTOP_CONNECTED=true
+      DESKTOP_CONNECTED=true
+      echo "DESKTOP TRUE"
       ;;
     c)
       CONFIG_TO_LAUNCH="${OPTARG}"
@@ -197,19 +218,22 @@ do
 done
 
 if [[ $HOSTNAME == "MTower" ]]
+echo "DESKTOP IS: ${DESKTOP_CONNECTED}"
 then
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
-    if $DESKTOP_CONNECTED
+    if [ "$DESKTOP_CONNECTED" = true ]
     then
+      echo "DESKTOP FUNC SELECTED"
       tower_connected_bash
     else
       tower_bash
     fi
   elif [[ $CONFIG_TO_LAUNCH == "ANDROID" ]]
   then
-    if $DESKTOP_CONNECTED
+    if [ "$DESKTOP_CONNECTED" = true ]
     then
+      echo "DESKTOP FUNC SELECTED"
       tower_connected_android
     else
       tower_android
@@ -222,16 +246,18 @@ elif [[ $HOSTNAME == "Mtop" ]]
 then
   if [[ $CONFIG_TO_LAUNCH == "BASH" ]]
   then
-    if $DESKTOP_CONNECTED
+    if [ "$DESKTOP_CONNECTED" = true ]
     then
+      echo "DESKTOP FUNC SELECTED"
       top_connected_bash
     else
       top_bash
     fi
   elif [[ $CONFIG_TO_LAUNCH == "ANDROID" ]]
   then
-    if $DESKTOP_CONNECTED
+    if [ "$DESKTOP_CONNECTED" = true ]
     then
+      echo "DESKTOP FUNC SELECTED"
       top_connected_android
     else
       top_android

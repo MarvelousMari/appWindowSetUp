@@ -58,8 +58,10 @@ class App(QWidget):
     def android_on_click(self):
         print('android_on_click')
         if self.launchWithDesktop:
+            print("android with desktop")
             androidSubProc = subprocess.run([self.launchPath, "-c", "ANDROID", "-d"])
         else:
+            print("android no desktop")
             androidSubProc = subprocess.run([self.launchPath, "-c", "ANDROID"])
         sys.exit()
 
@@ -67,8 +69,10 @@ class App(QWidget):
     def bash_on_click(self):
         print('bash_on_click')
         if self.launchWithDesktop:
+            print("bash with desktop")
             bashSubProc = subprocess.run([self.launchPath, "-c", "BASH", "-d"])
         else:
+            print("bash no desktop")
             bashSubProc = subprocess.run([self.launchPath, "-c", "BASH"])
         sys.exit()
 
